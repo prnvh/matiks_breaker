@@ -16,6 +16,22 @@ import argparse
 import json
 import requests
 from datetime import date
+import os
+from dotenv import load_dotenv
+
+# 1. Load the .env file
+load_dotenv()
+
+# 2. Grab the actual secret string from the environment
+my_secret_token = os.getenv("AUTHORIZATION_KEY")
+
+# 3. Use it in your headers
+headers = {
+    "Content-Type": "application/json",
+    "authorization": my_secret_token  # <--- NO QUOTES HERE
+}
+
+print(f"Sending request with token starting with: {my_secret_token[:10]}...")
 
 API_URL = "https://server.matiks.org/api"
 
@@ -61,7 +77,7 @@ def fetch_puzzle(puzzle_date: str) -> dict:
         "content-type": "application/json",
         "origin": "https://www.matiks.in",
         "referer": "https://www.matiks.in/",
-        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1c2VyIiwiZXhwIjoxODA0MzE3MDMzLCJpYXQiOjE3NzI3ODEwMzMsImlkIjoiNjlhYTdkZTlhMjljYzJjMDEyMDNlY2RlIiwianRpIjoiOGIzZDEyMzNmNGFjYmU4YjkxZGE1YTMyMzNlY2Y4YTMifQ.7V_2QQ2edc3C-HWy8twXiU4DLpNY17f09vrWuw4srI4",
+        "authorization": my_secret_token,  # <-- replace with actual value from .env
         "x-app-version": "1.18.629",
         "x-device-id": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
         "x-request-id": "web_4917448b-b964-47be-a3c7-d558b58f4a76",
